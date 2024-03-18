@@ -1,8 +1,9 @@
-import { useState } from "react";
 import "./App.css";
+import { mockAudio, mockChart } from "./mocks/mock";
+import IPhigrosPlayer from "./modules/player";
 
 function App() {
-  return <></>;
+  return <IPhigrosPlayer chart={mockChart} audio={mockAudio} />;
 }
 
 export default App;

@@ -3,6 +3,7 @@ import { EEventType, IEvent } from "@/types/event";
 import { IGame } from "@/types/game";
 import { ILine } from "@/types/line";
 import { beatToTime } from "@/utils/util";
+import { transformCoordinate } from "../../constans/constans";
 
 function renderLine(
   context: CanvasRenderingContext2D,
@@ -11,7 +12,7 @@ function renderLine(
   game: IGame
 ) {
   //先计算当前帧Line的各个属性
-  const { x, y, rotation, events } = line;
+  const {rotation, events } = line;
   //通过当前值和events计算出当前的Line的属性
   events.forEach((event) => {
     const eventStartTime = beatToTime(event.startTime, game.chart.bpm);
@@ -34,14 +35,18 @@ function renderLine(
 
   //设置画布的旋转角度
   context.save();
-  //TODO: 标准化坐标系
+  const [x, y] = transformCoordinate(line.x, line.y, context);
   context.translate(x, y);
-  context.rotate(rotation);
+  const radians = rotation * (Math.PI / 180);
+  context.rotate(radians);
   //绘制Line
   context.beginPath();
   context.moveTo(-1000, 0);
   context.lineTo(1000, 0);
-  context.strokeStyle = "white";
+  //设置线条样式 金色
+  context.strokeStyle = "gold";
+  //宽度
+  context.lineWidth = 4;
   context.stroke();
   context.closePath();
   //TODO: 绘制Line上的Note
