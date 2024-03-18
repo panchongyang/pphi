@@ -11,7 +11,7 @@ export interface Note {
   x: number;
 }
 
-enum ENoteType {
+export enum ENoteType {
   TAP = "TAP",
   HOLD = "HOLD",
   DRAG = "DRAG",

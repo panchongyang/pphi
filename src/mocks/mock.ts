@@ -2,7 +2,7 @@ import { IBPM, IPhigrosChart } from "@/types/chart";
 import { EEventType } from "@/types/event";
 import { ILine } from "@/types/line";
 import music from "@/assets/Felis.mp3";
-import { beatToTime } from "@/utils/util";
+import { ENoteType, INote } from "@/types/note";
 
 export const mockBpm: IBPM[] = [
   {
@@ -30,6 +30,8 @@ const mockLine1: ILine = {
   rotation: 0,
   opacity: 0,
 };
+
+mockLine1.notes = getMockNotes();
 
 const mockLine2: ILine = {
   events: [
@@ -79,3 +81,17 @@ export const mockChart: IPhigrosChart = {
 };
 
 export const mockAudio = new Audio(music);
+
+function getMockNotes(): INote[] {
+  const notes: INote[] = [];
+  for (let i = 0; i < 100; i++) {
+    notes.push({
+      id: i.toString(),
+      line: mockLine1,
+      time: [i, 0, 1],
+      type: ENoteType.TAP,
+      x: 0,
+    });
+  }
+  return notes;
+}

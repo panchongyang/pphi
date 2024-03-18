@@ -4,6 +4,7 @@ import { IGame } from "@/types/game";
 import { ILine } from "@/types/line";
 import { beatToTime } from "@/utils/util";
 import { transformCoordinate } from "../../constans/constans";
+import { renderNote } from "./note";
 
 function renderLine(
   context: CanvasRenderingContext2D,
@@ -49,7 +50,10 @@ function renderLine(
   context.lineWidth = 4;
   context.stroke();
   context.closePath();
-  //TODO: 绘制Line上的Note
+  //绘制Note
+  line.notes.forEach((note) => {
+    renderNote(note, time, game, context);
+  })
   //结束绘制
   context.restore();
 }
