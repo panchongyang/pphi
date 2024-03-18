@@ -29,6 +29,7 @@ const mockLine1: ILine = {
   y: 0,
   rotation: 0,
   opacity: 0,
+  speed: 7,
 };
 
 mockLine1.notes = getMockNotes();
@@ -68,7 +69,8 @@ const mockLine2: ILine = {
   x: 0,
   y: 0,
   rotation: 0,
-  opacity: 0
+  opacity: 0,
+  speed: 7,
 }
 
 export const mockChart: IPhigrosChart = {

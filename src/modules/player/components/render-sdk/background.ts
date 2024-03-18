@@ -18,7 +18,7 @@ const renderBackground = (
     context.filter = "none";
   }
   // 加透明黑色幕布，达到降低亮度的效果
-  context.fillStyle = "rgba(0, 0, 0, 0.3)";
+  context.fillStyle = "rgba(0, 0, 0, 0.5)";
   context.fillRect(-width / 2, -height / 2, width, height);
 };
 

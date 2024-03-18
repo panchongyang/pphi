@@ -9,4 +9,5 @@ export interface ILine {
   y: number;
   rotation: number;
   opacity: number;
+  speed: number;
 }

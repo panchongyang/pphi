@@ -8,11 +8,13 @@ interface IPhigrosPlayerProps {
 
 const IPhigrosPlayer: React.FC<IPhigrosPlayerProps> = (props) => {
   const { chart, audio } = props;
-  const { ref, start } = usePlayer(chart, audio);
+  const { ref, start, pause, continueGame } = usePlayer(chart, audio);
 
   return (
     <>
       <button onClick={start}>开始</button>
+      <button onClick={pause}>暂停</button>
+      <button onClick={continueGame}>继续</button>
       <div>
         <canvas
           style={{

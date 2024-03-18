@@ -20,4 +20,6 @@ export enum EEventType {
   Y = "Y",
   /** 旋转 */
   ROTATION = "ROTATION",
+  /** 流速 */
+  SPEED = "SPEED",
 }

@@ -32,6 +32,9 @@ function renderLine(
     if (event.type === EEventType.OPACITY) {
       line.opacity = getCurrentEventValue(event, time, game.chart.bpm);
     }
+    if (event.type === EEventType.SPEED) {
+      line.speed = getCurrentEventValue(event, time, game.chart.bpm);
+    }
   });
 
   //设置画布的旋转角度
