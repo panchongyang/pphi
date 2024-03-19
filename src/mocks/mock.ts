@@ -90,8 +90,9 @@ function getMockNotes(): INote[] {
     notes.push({
       id: i.toString(),
       line: mockLine1,
-      time: [i, 0, 1],
-      type: ENoteType.TAP,
+      time: [i * 2, 0, 1],
+      type: ENoteType.HOLD,
+      duration: [i * 2 + 1, 0, 1],
       x: 0,
     });
   }
