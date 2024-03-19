@@ -1,3 +1,4 @@
+import { EaseType } from "@/utils/ease";
 import { IBeat } from "./game";
 
 export interface IEvent {
@@ -5,7 +6,7 @@ export interface IEvent {
   startTime: IBeat;
   endTime: IBeat;
   /** 速度变化曲线 */
-  speed: string;
+  speed: EaseType;
   /** 事件类型 */
   type: EEventType;
   startValue: number;

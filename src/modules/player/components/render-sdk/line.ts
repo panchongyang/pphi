@@ -5,6 +5,7 @@ import { ILine } from "@/types/line";
 import { beatToTime } from "@/utils/util";
 import { transformCoordinate } from "../../constans/constans";
 import { renderNote } from "./note";
+import { easeMap } from "@/utils/ease";
 
 function renderLine(
   context: CanvasRenderingContext2D,
@@ -13,7 +14,7 @@ function renderLine(
   game: IGame
 ) {
   //先计算当前帧Line的各个属性
-  const {rotation, events } = line;
+  const { rotation, events } = line;
   //通过当前值和events计算出当前的Line的属性
   events.forEach((event) => {
     const eventStartTime = beatToTime(event.startTime, game.chart.bpm);
@@ -56,23 +57,33 @@ function renderLine(
   //绘制Note
   line.notes.forEach((note) => {
     renderNote(note, time, game, context);
-  })
+  });
   //结束绘制
   context.restore();
 }
 
 export default renderLine;
 
-const getCurrentEventValue = (event: IEvent, time: number, bpm: IBPM[]) => {
-  //TODO: 支持非线形变化
-  const eventStartTime = beatToTime(event.startTime, bpm);
-  const eventEndTime = beatToTime(event.endTime, bpm);
-  if (time > eventEndTime) {
+// 计算当前时间点的值
+export function getCurrentEventValue(
+  event: IEvent,
+  time: number,
+  bpm: IBPM[]
+): number {
+  // 计算时间点在 [0, 1] 范围内的位置
+  const t =
+    (time - beatToTime(event.startTime, bpm)) /
+    (beatToTime(event.endTime, bpm) - beatToTime(event.startTime, bpm));
+  if(t > 1) {
     return event.endValue;
   }
-  return (
-    event.startValue +
-    ((event.endValue - event.startValue) * (time - eventStartTime)) /
-      (eventEndTime - eventStartTime)
-  );
-};
+
+  // 使用缓动函数计算当前值
+  const easedT = easeMap[event.speed](t);
+
+  // 根据缓动函数的结果计算当前值
+  const currentValue =
+    event.startValue + (event.endValue - event.startValue) * easedT;
+
+  return currentValue;
+}
