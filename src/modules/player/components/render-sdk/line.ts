@@ -45,8 +45,8 @@ function renderLine(
   context.beginPath();
   context.moveTo(-1000, 0);
   context.lineTo(1000, 0);
-  //设置线条样式 金色
-  context.strokeStyle = "gold";
+  //设置线条样式 金色, 带透明度
+  context.strokeStyle = `rgba(255, 215, 0, ${line.opacity})`;
   //宽度
   context.lineWidth = 4;
   context.stroke();

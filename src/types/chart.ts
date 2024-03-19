@@ -10,6 +10,7 @@ export interface IPhigrosChart {
   bpm: IBPM[];
   /** 单位毫秒 */
   offset: number;
+  background: string;
 }
 
 export interface IBPM {

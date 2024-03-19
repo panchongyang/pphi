@@ -6,6 +6,7 @@ export interface IGame {
   /** 当前游戏时间 */
   currentTime: number;
   audio: HTMLAudioElement;
+  background: HTMLImageElement;
 }
 
 export enum EGameStatus {

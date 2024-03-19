@@ -9,16 +9,27 @@ const renderBackground = (
   const { width, height } = context.canvas;
   if (img) {
     const { width: imgWidth, height: imgHeight } = img;
-    const scale = Math.max(width / imgWidth, height / imgHeight);
-    const dx = (width - imgWidth * scale) / 2;
-    const dy = (height - imgHeight * scale) / 2;
+    const scale = Math.min(width / imgWidth, height / imgHeight);
+    context.fillStyle = "rgba(0, 0, 0)";
+    context.fillRect(-width / 2, -height / 2, width, height);
     // 加模糊
-    context.filter = "blur(2px)";
-    context.drawImage(img, dx, dy, imgWidth * scale, imgHeight * scale);
+    context.save();
+    context.filter = "blur(24px)";
+    //图片上下翻转
+    context.scale(1, -1);
+    //居中绘制
+    context.drawImage(
+      img,
+      (-imgWidth * scale) / 2,
+      (-imgHeight * scale) / 2,
+      imgWidth * scale,
+      imgHeight * scale
+    );
     context.filter = "none";
+    context.restore();
   }
   // 加透明黑色幕布，达到降低亮度的效果
-  context.fillStyle = "rgba(0, 0, 0, 0.5)";
+  context.fillStyle = "rgba(0, 0, 0, 0.7)";
   context.fillRect(-width / 2, -height / 2, width, height);
 };
 

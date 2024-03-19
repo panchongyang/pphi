@@ -3,18 +3,18 @@ import { IPhigrosChart } from "@/types/chart";
 
 interface IPhigrosPlayerProps {
   chart: IPhigrosChart;
-  audio: HTMLAudioElement;
 }
 
 const IPhigrosPlayer: React.FC<IPhigrosPlayerProps> = (props) => {
-  const { chart, audio } = props;
-  const { ref, start, pause, continueGame } = usePlayer(chart, audio);
+  const { chart } = props;
+  const { ref, start, pause, continueGame, audioRef } = usePlayer(chart);
 
   return (
     <>
       <button onClick={start}>开始</button>
       <button onClick={pause}>暂停</button>
       <button onClick={continueGame}>继续</button>
+      <audio src={chart.music} ref={audioRef} controls></audio>
       <div>
         <canvas
           style={{

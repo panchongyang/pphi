@@ -1,9 +1,9 @@
 import "./App.css";
-import { mockAudio, mockChart } from "./mocks/mock";
+import {  mockChart } from "./mocks/mock";
 import IPhigrosPlayer from "./modules/player";
 
 function App() {
-  return <IPhigrosPlayer chart={mockChart} audio={mockAudio} />;
+  return <IPhigrosPlayer chart={mockChart} />;
 }
 
 export default App;

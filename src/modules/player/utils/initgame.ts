@@ -16,12 +16,16 @@ export function initGame(chart: IPhigrosChart, audio: HTMLAudioElement): IGame {
     bpm: transformBpm(chart.bpm),
   };
 
+  const background = new Image();
+  background.src = chart.background;
+
   console.log(runTimeChart)
   return {
     status: EGameStatus.NOT_STARTED,
     chart: runTimeChart,
     currentTime: 0,
     audio,
+    background: background,
   };
 }
 
