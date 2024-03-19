@@ -1,12 +1,12 @@
 import { IBPM, IPhigrosChart } from "@/types/chart";
 import { EEventType } from "@/types/event";
 import { ILine } from "@/types/line";
-import music from "@/assets/Felis.mp3";
+import music from "@/assets/ETIA. - MVURBD.mp3";
 import { ENoteType, INote } from "@/types/note";
 
 export const mockBpm: IBPM[] = [
   {
-    target: 120,
+    target: 175,
     time: [0, 0, 1],
   },
 ];
@@ -83,6 +83,7 @@ export const mockChart: IPhigrosChart = {
 };
 
 export const mockAudio = new Audio(music);
+mockAudio.volume = 0.2;
 
 function getMockNotes(): INote[] {
   const notes: INote[] = [];
@@ -90,8 +91,7 @@ function getMockNotes(): INote[] {
     notes.push({
       id: i.toString(),
       time: [i * 2, 0, 1],
-      type: ENoteType.HOLD,
-      duration: [i * 2 + 1, 0, 1],
+      type: ENoteType.TAP,
       x: 0,
     });
   }

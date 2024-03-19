@@ -6,7 +6,7 @@ import { IRuntimeBPM, IRuntimeChart } from "@/types/runtime/chart";
 import { IRuntimeEvent } from "@/types/runtime/event";
 import { EGameStatus, IGame } from "@/types/runtime/game";
 import { IRuntimeLine } from "@/types/runtime/line";
-import { IRuntimeNote } from "@/types/runtime/note";
+import { ENoteStatus, IRuntimeNote } from "@/types/runtime/note";
 import { beatToTime } from "@/utils/util";
 
 export function initGame(chart: IPhigrosChart, audio: HTMLAudioElement): IGame {
@@ -45,12 +45,14 @@ function transfromNote(
       time: beatToTime(note.time, bpm),
       duration: beatToTime(note.duration, bpm),
       line,
+      status: ENoteStatus.NOT_STARTED
     };
   }
   return {
     ...note,
     time: beatToTime(note.time, bpm),
     line,
+    status: ENoteStatus.NOT_STARTED
   };
 }
 

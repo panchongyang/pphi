@@ -1,14 +1,25 @@
 import { ENoteType } from "@/types/note";
 import { transformCoordinate } from "../../constans/constans";
 import { EEventType } from "@/types/event";
-import { IRuntimeHold, IRuntimeNote } from "@/types/runtime/note";
+import { ENoteStatus, IRuntimeHold, IRuntimeNote } from "@/types/runtime/note";
+import tapAudioSrc from "@/assets/audios/note.mp3";
+import flickAudioSrc from "@/assets/audios/flick.mp3";
+import dragAudioSrc from "@/assets/audios/drag.mp3";
+
+const tapAudio = new Audio(tapAudioSrc);
+const flickAudio = new Audio(flickAudioSrc);
+const dragAudio = new Audio(dragAudioSrc);
+
+tapAudio.volume = 1;
+flickAudio.volume = 1;
+dragAudio.volume = 1;
 
 export function renderNote(
   note: IRuntimeNote,
   time: number,
   context: CanvasRenderingContext2D
 ) {
-  if (isTimeOut(note, time)) return;
+  if (note.status === ENoteStatus.FINISHED) return;
   if (note.type === ENoteType.HOLD) {
     renderHoldNote(note, time, context);
   } else {
@@ -21,6 +32,17 @@ function renderHoldNote(
   time: number,
   context: CanvasRenderingContext2D
 ) {
+  if (
+    note.status === ENoteStatus.NOT_STARTED &&
+    time >= note.time &&
+    time <= note.duration
+  ) {
+    tapAudio.currentTime = 0;
+    tapAudio.play();
+    note.status = ENoteStatus.IN_PROGRESS;
+  } else if (note.status === ENoteStatus.IN_PROGRESS && time > note.duration) {
+    note.status = ENoteStatus.FINISHED;
+  }
   const x1 = -60 + note.x;
   const x2 = 60 + note.x;
   const { upY, downY } = getHoldY(note, time);
@@ -44,6 +66,23 @@ function renderNormalNote(
   time: number,
   context: CanvasRenderingContext2D
 ) {
+  if(note.status === ENoteStatus.NOT_STARTED && time >= note.time) {
+    switch (note.type) {
+      case ENoteType.TAP:
+        tapAudio.currentTime = 0;
+        tapAudio.play();
+        break;
+      case ENoteType.DRAG:
+        dragAudio.currentTime = 0;
+        dragAudio.play();
+        break;
+      case ENoteType.FLICK:
+        flickAudio.currentTime = 0;
+        flickAudio.play();
+        break;
+    }
+    note.status = ENoteStatus.FINISHED;
+  }
   //线段长120个标准长度
   context.beginPath();
   const startX = -60 + note.x;
@@ -83,9 +122,7 @@ function getHoldY(
     .filter((event) => event.type === EEventType.SPEED)
     .map((event, index, arr) => ({
       start: event.startTime,
-      end: arr[index + 1]
-        ? arr[index + 1].startTime
-        : Infinity,
+      end: arr[index + 1] ? arr[index + 1].startTime : Infinity,
       value: event.endValue,
     }));
   if (speeds.length === 0) {
@@ -143,9 +180,7 @@ function getNoteY(note: IRuntimeNote, time: number) {
     .filter((event) => event.type === EEventType.SPEED)
     .map((event, index, arr) => ({
       start: event.startTime,
-      end: arr[index + 1]
-        ? arr[index + 1].startTime
-        : Infinity,
+      end: arr[index + 1] ? arr[index + 1].startTime : Infinity,
       value: event.endValue,
     }));
   if (speeds.length === 0) {
@@ -169,11 +204,6 @@ function getNoteY(note: IRuntimeNote, time: number) {
   }, 0);
 
   return y;
-}
-
-//判断是否超时
-function isTimeOut(note: IRuntimeNote, time: number) {
-  return note.type === ENoteType.HOLD ? note.duration < time : note.time < time;
 }
 
 //获取两个数字元组重叠的区间
