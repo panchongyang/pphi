@@ -7,7 +7,7 @@ import { ENoteType, INote } from "@/types/note";
 export const mockBpm: IBPM[] = [
   {
     target: 120,
-    time: [Infinity, 0, 1],
+    time: [0, 0, 1],
   },
 ];
 
@@ -89,7 +89,6 @@ function getMockNotes(): INote[] {
   for (let i = 0; i < 100; i++) {
     notes.push({
       id: i.toString(),
-      line: mockLine1,
       time: [i * 2, 0, 1],
       type: ENoteType.HOLD,
       duration: [i * 2 + 1, 0, 1],

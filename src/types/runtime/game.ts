@@ -1,8 +1,8 @@
-import { IPhigrosChart } from "./chart";
+import { IRuntimeChart } from "./chart";
 
 export interface IGame {
   status: EGameStatus;
-  chart: IPhigrosChart;
+  chart: IRuntimeChart;
   /** 当前游戏时间 */
   currentTime: number;
   audio: HTMLAudioElement;
@@ -18,6 +18,3 @@ export enum EGameStatus {
   /** 暂停 */
   PAUSED = "PAUSED",
 }
-
-/** [整数拍子数, 向上偏移分子, 向上偏移分母] */
-export type IBeat = [number, number, number];

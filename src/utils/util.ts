@@ -1,4 +1,4 @@
-import { IBeat } from "@/types/game";
+import { IBeat } from "@/types/beat";
 import { IBPM, IPhigrosChart } from "../types/chart";
 
 export const parseChartJson = (json: string) => {
@@ -12,19 +12,29 @@ export const parseChartJson = (json: string) => {
 
 export const beatToTime = (beat: IBeat, bpm: IBPM[]) => {
   const [beatCount, up, down] = beat;
-  const time = bpm.reduce((acc, cur) => {
-    if (compareBeat(beat, cur.time) < 0) {
-      //返回当前bpm下的时间
-      return ((60 * 1000) / cur.target) * (beatCount + up / down);
-    } else if (compareBeat(beat, cur.time) > 0) {
-      return (
-        ((60 * 1000) / cur.target) * (cur.time[0] + cur.time[1] / cur.time[2]) +
-        acc
-      );
-    } else {
-      return ((60 * 1000) / cur.target) * (beatCount + up / down);
-    }
-  }, 0);
+  const time = bpm
+    .map((item, index, arr) => {
+      return {
+        target: item.target,
+        time: arr[index + 1]
+          ? arr[index + 1].time
+          : ([Infinity, 0, 1] as IBeat),
+      };
+    })
+    .reduce((acc, cur) => {
+      if (compareBeat(beat, cur.time) < 0) {
+        //返回当前bpm下的时间
+        return ((60 * 1000) / cur.target) * (beatCount + up / down);
+      } else if (compareBeat(beat, cur.time) > 0) {
+        return (
+          ((60 * 1000) / cur.target) *
+            (cur.time[0] + cur.time[1] / cur.time[2]) +
+          acc
+        );
+      } else {
+        return ((60 * 1000) / cur.target) * (beatCount + up / down);
+      }
+    }, 0);
   return time;
 };
 

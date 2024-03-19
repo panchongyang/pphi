@@ -1,5 +1,5 @@
 import { EaseType } from "@/utils/ease";
-import { IBeat } from "./game";
+import { IBeat } from "./beat";
 
 export interface IEvent {
   id: string;

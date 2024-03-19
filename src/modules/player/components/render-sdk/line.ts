@@ -1,40 +1,37 @@
-import { IBPM } from "@/types/chart";
-import { EEventType, IEvent } from "@/types/event";
-import { IGame } from "@/types/game";
-import { ILine } from "@/types/line";
-import { beatToTime } from "@/utils/util";
+import { EEventType } from "@/types/event";
 import { transformCoordinate } from "../../constans/constans";
 import { renderNote } from "./note";
 import { easeMap } from "@/utils/ease";
+import { IRuntimeLine } from "@/types/runtime/line";
+import { IRuntimeEvent } from "@/types/runtime/event";
 
 function renderLine(
   context: CanvasRenderingContext2D,
-  line: ILine,
+  line: IRuntimeLine,
   time: number,
-  game: IGame
 ) {
   //先计算当前帧Line的各个属性
   const { rotation, events } = line;
   //通过当前值和events计算出当前的Line的属性
   events.forEach((event) => {
-    const eventStartTime = beatToTime(event.startTime, game.chart.bpm);
+    const eventStartTime = event.startTime;
     if (time < eventStartTime) {
       return;
     }
     if (event.type === EEventType.X) {
-      line.x = getCurrentEventValue(event, time, game.chart.bpm);
+      line.x = getCurrentEventValue(event, time);
     }
     if (event.type === EEventType.Y) {
-      line.y = getCurrentEventValue(event, time, game.chart.bpm);
+      line.y = getCurrentEventValue(event, time);
     }
     if (event.type === EEventType.ROTATION) {
-      line.rotation = getCurrentEventValue(event, time, game.chart.bpm);
+      line.rotation = getCurrentEventValue(event, time);
     }
     if (event.type === EEventType.OPACITY) {
-      line.opacity = getCurrentEventValue(event, time, game.chart.bpm);
+      line.opacity = getCurrentEventValue(event, time);
     }
     if (event.type === EEventType.SPEED) {
-      line.speed = getCurrentEventValue(event, time, game.chart.bpm);
+      line.speed = getCurrentEventValue(event, time);
     }
   });
 
@@ -56,7 +53,7 @@ function renderLine(
   context.closePath();
   //绘制Note
   line.notes.forEach((note) => {
-    renderNote(note, time, game, context);
+    renderNote(note, time, context);
   });
   //结束绘制
   context.restore();
@@ -66,15 +63,12 @@ export default renderLine;
 
 // 计算当前时间点的值
 export function getCurrentEventValue(
-  event: IEvent,
-  time: number,
-  bpm: IBPM[]
+  event: IRuntimeEvent,
+  time: number
 ): number {
   // 计算时间点在 [0, 1] 范围内的位置
-  const t =
-    (time - beatToTime(event.startTime, bpm)) /
-    (beatToTime(event.endTime, bpm) - beatToTime(event.startTime, bpm));
-  if(t > 1) {
+  const t = (time - event.startTime) / (event.endTime - event.startTime);
+  if (t > 1) {
     return event.endValue;
   }
 

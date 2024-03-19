@@ -1,7 +1,7 @@
 import { IPhigrosChart } from "@/types/chart";
 import { useEffect, useRef, useState } from "react";
 import { initGame } from "../utils/initgame";
-import { EGameStatus, IGame } from "@/types/game";
+import { EGameStatus, IGame } from "@/types/runtime/game";
 import renderLine from "../components/render-sdk/line";
 import { beforeRender } from "../components/render-sdk/beforeRender";
 import renderBackground from "../components/render-sdk/background";
@@ -35,7 +35,7 @@ export const usePlayer = (chart: IPhigrosChart, audio: HTMLAudioElement) => {
       renderBackground(context);
       // 内容绘制
       game.chart.lines.forEach((line) => {
-        renderLine(context, line, currentTime, game);
+        renderLine(context, line, currentTime);
       });
     }
     if (game.status === EGameStatus.PLAYING) {

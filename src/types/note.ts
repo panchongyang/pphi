@@ -1,9 +1,7 @@
-import { IBeat } from "./game";
-import { ILine } from "./line";
+import { IBeat } from "./beat";
 
 export interface Note {
   id: string;
-  line: ILine;
   type: ENoteType;
   /** 判定时间节点，[整数拍子数, 向上偏移分子, 向上偏移分母] */
   time: IBeat;

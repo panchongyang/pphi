@@ -1,4 +1,4 @@
-import { IBeat } from "./game";
+import { IBeat } from "./beat";
 import { ILine } from "./line";
 
 export interface IPhigrosChart {
@@ -13,6 +13,6 @@ export interface IPhigrosChart {
 }
 
 export interface IBPM {
-  target: number;
-  time: IBeat;
+  target: number; //该bpm的目标值
+  time: IBeat; //该bpm的开始时间
 }
