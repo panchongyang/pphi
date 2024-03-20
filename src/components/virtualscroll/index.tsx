@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import styles from "./index.module.scss";
 
 interface VirtualScrollProps {
   children: React.ReactNode[];
@@ -6,13 +7,14 @@ interface VirtualScrollProps {
   style?: React.CSSProperties;
   itemHeight: number;
   reverse?: boolean;
+  scrollPos?: number;
 }
 
 /**
  * 使子组件列表支持虚拟滚动
  */
 const VirtualScroll: React.FC<VirtualScrollProps> = (props) => {
-  const { children, className, style, itemHeight, reverse } = props;
+  const { children, className, style, itemHeight, reverse, scrollPos } = props;
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleRange, setVisibleRange] = useState([0, 0]);
 
@@ -47,6 +49,12 @@ const VirtualScroll: React.FC<VirtualScrollProps> = (props) => {
     };
   }, [children.length, itemHeight, reverse]);
 
+  useEffect(() => {
+    if (containerRef.current && scrollPos !== undefined) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight * scrollPos - containerRef.current.clientHeight + itemHeight * 2;
+    }
+  }, [itemHeight, scrollPos])
+
   if (!children) {
     return null;
   }
@@ -58,6 +66,7 @@ const VirtualScroll: React.FC<VirtualScrollProps> = (props) => {
         ...style,
         overflow: "auto",
       }}
+      className={styles["virtual-scroll-container"]}
     >
       <div
         className={className}

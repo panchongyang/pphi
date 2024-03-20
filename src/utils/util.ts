@@ -68,3 +68,14 @@ export const getBeatCount = (time: number, bpm: IBPM[]) => {
   }, 0);
   return res;
 };
+
+
+const ceateIdContext = () => {
+  let id = 0;
+  return () => {
+    id = id + 1;
+    return id;
+  };
+};
+
+export const getId = ceateIdContext();

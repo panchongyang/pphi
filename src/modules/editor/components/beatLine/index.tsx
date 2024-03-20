@@ -4,14 +4,15 @@ import { ENoteType, INote, NoteColor } from "@/types/note";
 import { ILine } from "@/types/line";
 import { useEffect, useRef, useState } from "react";
 import { Row } from "antd";
-import { BEATHEIGHT } from "../../contans";
-import { compareBeat } from "@/utils/util";
+import { compareBeat, getId } from "@/utils/util";
 
 interface BeatLineProps {
   beat: IBeat;
   line: ILine;
   onChange?: (line: ILine) => void;
   height: number;
+  beatHeight: number;
+  analysis?: number;
 }
 
 const getPositionX = (note: INote) => {
@@ -29,18 +30,8 @@ const getBeatNote = (beat: IBeat, notes: INote[]) => {
   });
 };
 
-const ceateIdContext = () => {
-  let id = 0;
-  return () => {
-    id = id + 1;
-    return id;
-  };
-};
-
-const getId = ceateIdContext();
-
 const BeatLine: React.FC<BeatLineProps> = (props) => {
-  const { beat, line, onChange } = props;
+  const { beat, line, onChange, height, beatHeight, analysis } = props;
   const [viewNote, setViewNote] = useState<INote>();
   const rowRef = useRef<HTMLDivElement>(null);
   const [focus, setFocus] = useState(false);
@@ -54,12 +45,40 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
         });
         onChange?.(line);
       }
-    }
-    window.addEventListener("keydown", handleKeyDown)
+
+      if (e.key === "q" && focus) {
+        line.notes.push({
+          type: ENoteType.TAP,
+          id: `${line.id}-${getId()}`,
+          time: beat,
+          x: 0,
+        });
+        onChange?.(line);
+      }
+      if (e.key === "w" && focus) {
+        line.notes.push({
+          type: ENoteType.DRAG,
+          id: `${line.id}-${getId()}`,
+          time: beat,
+          x: 0,
+        });
+        onChange?.(line);
+      }
+      if (e.key === "e" && focus) {
+        line.notes.push({
+          type: ENoteType.FLICK,
+          id: `${line.id}-${getId()}`,
+          time: beat,
+          x: 0,
+        });
+        onChange?.(line);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-    }
-  }, [beat, focus, line, onChange])
+    };
+  }, [beat, focus, line, onChange]);
 
   return (
     <Row
@@ -95,7 +114,7 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
         onChange?.(line);
       }}
       style={{
-        height: props.height,
+        height: height,
       }}
     >
       <div className={styles["beat-line"]}>
@@ -112,8 +131,9 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
                   width: 60,
                   height: 8,
                   backgroundColor: NoteColor[item.type],
-                  left: getPositionX(item),
-                  top: -4 + -(BEATHEIGHT / item.time[2]) * item.time[1],
+                  left: getPositionX(item) - 30,
+                  top: -4 + -(beatHeight / item.time[2]) * item.time[1],
+                  zIndex: 3
                 }}
               ></div>
             );
@@ -126,12 +146,27 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
               width: 60,
               height: 8,
               backgroundColor: NoteColor[viewNote.type],
-              left: getPositionX(viewNote),
+              left: getPositionX(viewNote) - 30,
               top: -4,
               opacity: 0.5,
+              zIndex: 2,
             }}
           />
         )}
+        {
+          <div
+            style={{
+              position: "absolute",
+              left: 0,
+              top: -4,
+              width: analysis ? `${analysis}px` : 0,
+              height: 8,
+              backgroundColor: "green",
+              transition: "width 0.5s ease",
+              zIndex: 1
+            }}
+          ></div>
+        }
       </div>
     </Row>
   );

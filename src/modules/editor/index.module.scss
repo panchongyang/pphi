@@ -1,6 +1,7 @@
 .editor-content {
   width: 800px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: visible;
   display: flex;
   flex-direction: column-reverse;
 
@@ -26,8 +27,9 @@
 
 .editor {
   display: flex;
+  user-select: none;
 }
 
 .editor-config {
-  width: 200px;
+  width: 500px;
 }

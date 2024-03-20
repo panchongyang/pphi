@@ -20,8 +20,8 @@ const IPhigrosPlayer: React.FC<IPhigrosPlayerProps> = (props) => {
           style={{
             border: "1px solid #000",
           }}
-          width={1024}
-          height={700}
+          width={1024 / 2}
+          height={700 / 2}
           ref={ref}
         ></canvas>
       </div>

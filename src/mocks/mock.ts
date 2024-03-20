@@ -1,11 +1,13 @@
 import { IBPM, IPhigrosChart } from "@/types/chart";
 import { EEventType, IEvent } from "@/types/event";
 import { ILine } from "@/types/line";
-import music from "@/assets/ETIA. - MVURBD.mp3";
+import MVURBD from "@/assets/ETIA. - MVURBD.mp3";
+import feils from "@/assets/Felis.mp3";
+import testify from "@/assets/void,星熊南巫 - Testify.mp3";
 import background from "@/assets/下载.jpg";
 import { ENoteType, INote } from "@/types/note";
 
-export const mockBpm: IBPM[] = [
+export const MVURBDBpm: IBPM[] = [
   {
     target: 175,
     time: [0, 0, 1],
@@ -52,7 +54,7 @@ const mockLine1: ILine = {
   y: 0,
   rotation: 0,
   opacity: 0,
-  speed: 7,
+  speed: 9,
 };
 
 // mockLine1.notes = getMockNotes();
@@ -111,15 +113,15 @@ const mockLine2: ILine = {
   y: 0,
   rotation: 0,
   opacity: 0,
-  speed: 7,
+  speed: 9,
 };
 
 export const mockChart: IPhigrosChart = {
   id: "c1",
   author: "",
-  music: music,
+  music: MVURBD,
   lines: [mockLine1, mockLine2],
-  bpm: mockBpm,
+  bpm: MVURBDBpm,
   offset: 0,
   background: background
 };
