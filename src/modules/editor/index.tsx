@@ -12,11 +12,12 @@ import { BEATHEIGHT } from "./contans";
 
 interface IPhigrosChartEditorProps {
   chart: IPhigrosChart;
+  audio: HTMLAudioElement | undefined;
   onChartChange?: (chart: IPhigrosChart) => void;
 }
 
 const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
-  const { chart, onChartChange } = props;
+  const { chart, onChartChange, audio } = props;
   const [ready, setReady] = useState(false);
   const [beatCount, setBeatCount] = useState(0);
   const [config, setConfig] = useState<EditorConfigValue>({
@@ -33,8 +34,8 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
   const division = config.beatDivision || 1;
 
   useEffect(() => {
-    const audio = new Audio(chart.music);
     setReady(false);
+    if(!audio) return;
 
     audio.onloadedmetadata = () => {
       setReady(true);
@@ -45,7 +46,7 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
     return () => {
       audio.onloadedmetadata = null;
     };
-  }, [chart.music]);
+  }, [audio, chart.bpm, chart.music]);
 
   const beatLines = useMemo(() => {
     if (!ready) return null;
