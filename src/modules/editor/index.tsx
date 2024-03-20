@@ -23,12 +23,12 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
     beatDivision: 4,
   });
   const [line, setLine] = useState<ILine>(chart.lines[0]);
-  
+
   useEffect(() => {
     setLine((line) => {
       return chart.lines.find((l) => l.id === line.id) || chart.lines[0];
     });
-  }, [chart])
+  }, [chart]);
 
   const division = config.beatDivision || 1;
 
@@ -78,6 +78,9 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
                   height={BEATHEIGHT / division}
                   beat={[beatNumber, beatUp, beatDown]}
                   line={line}
+                  onChange={() => {
+                    onChartChange?.(cloneDeep(chart));
+                  }}
                 />
               </Col>
             </Row>
@@ -85,7 +88,15 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
         })}
       </VirtualScroll>
     );
-  }, [beatCount, config.beatDivision, division, line, ready]);
+  }, [
+    beatCount,
+    chart,
+    config.beatDivision,
+    division,
+    line,
+    onChartChange,
+    ready,
+  ]);
 
   if (!ready) {
     return <div>Loading...</div>;
@@ -97,7 +108,6 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
       <div className={styles["editor-config"]}>
         <Button
           onClick={() => {
-            console.log(chart, 1)
             onChartChange?.(cloneDeep(chart));
           }}
         >

@@ -37,7 +37,7 @@ const ceateIdContext = () => {
 };
 
 const BeatLine: React.FC<BeatLineProps> = (props) => {
-  const { beat, line } = props;
+  const { beat, line, onChange } = props;
   const [notes, setNotes] = useState<INote[]>(line.notes);
   const [viewNote, setViewNote] = useState<INote>();
   const rowRef = useRef<HTMLDivElement>(null);
@@ -73,6 +73,7 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
           x: getNoteX(relativeX),
         });
         setNotes(cloneDeep(line.notes));
+        onChange?.(line);
       }}
       style={{
         height: props.height,
