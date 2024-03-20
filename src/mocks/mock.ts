@@ -55,7 +55,7 @@ const mockLine1: ILine = {
   speed: 7,
 };
 
-mockLine1.notes = getMockNotes();
+// mockLine1.notes = getMockNotes();
 
 const mockLine2: ILine = {
   events: [

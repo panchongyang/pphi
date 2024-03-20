@@ -9,7 +9,7 @@ import { IRuntimeLine } from "@/types/runtime/line";
 import { ENoteStatus, IRuntimeNote } from "@/types/runtime/note";
 import { beatToTime } from "@/utils/util";
 
-export function initGame(chart: IPhigrosChart, audio: HTMLAudioElement): IGame {
+export function initGame(chart: IPhigrosChart, audio: HTMLAudioElement, status?: EGameStatus): IGame {
   const runTimeChart: IRuntimeChart = {
     ...chart,
     lines: chart.lines.map((line) => transfromLine(line, chart.bpm)),
@@ -21,7 +21,7 @@ export function initGame(chart: IPhigrosChart, audio: HTMLAudioElement): IGame {
 
   console.log(runTimeChart)
   return {
-    status: EGameStatus.NOT_STARTED,
+    status: status ?? EGameStatus.NOT_STARTED,
     chart: runTimeChart,
     currentTime: 0,
     audio,
@@ -61,7 +61,6 @@ function transfromNote(
 }
 
 function transformEvent(event: IEvent, bpm: IBPM[]): IRuntimeEvent {
-  console.log(beatToTime(event.startTime, bpm), beatToTime(event.endTime, bpm), event)
   return {
     ...event,
     startTime: beatToTime(event.startTime, bpm),

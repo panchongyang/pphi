@@ -35,3 +35,11 @@ export interface INoteFlick extends Note {
 }
 
 export type INote = INoteTap | INoteHold | INoteDrag | INoteFlick;
+
+
+export const NoteColor =  {
+  [ENoteType.TAP]: "skyblue",
+  [ENoteType.HOLD]: "skyblue",
+  [ENoteType.DRAG]: "yellow",
+  [ENoteType.FLICK]: "red",
+}

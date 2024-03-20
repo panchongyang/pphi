@@ -10,7 +10,7 @@ const IPhigrosPlayer: React.FC<IPhigrosPlayerProps> = (props) => {
   const { ref, start, pause, continueGame, audioRef } = usePlayer(chart);
 
   return (
-    <>
+    <div>
       <button onClick={start}>开始</button>
       <button onClick={pause}>暂停</button>
       <button onClick={continueGame}>继续</button>
@@ -25,7 +25,7 @@ const IPhigrosPlayer: React.FC<IPhigrosPlayerProps> = (props) => {
           ref={ref}
         ></canvas>
       </div>
-    </>
+    </div>
   );
 };
 

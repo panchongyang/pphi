@@ -50,3 +50,21 @@ export const compareBeat = (beat1: IBeat, beat2: IBeat) => {
   }
   return up1 / down1 - up2 / down2;
 };
+
+//根据时间和bpm数组返回beat总数
+export const getBeatCount = (time: number, bpm: IBPM[]) => {
+  const res = bpm.reduce((acc, cur, index, arr) => {
+    if (arr[index + 1] && beatToTime(arr[index + 1].time, bpm) <= time) {
+      return (
+        acc +
+        (beatToTime(arr[index + 1].time, bpm) - beatToTime(cur.time, bpm)) *
+          (cur.target / 60 / 1000)
+      );
+    } else {
+      return (
+        acc + (time - beatToTime(cur.time, bpm)) * (cur.target / 60 / 1000)
+      );
+    }
+  }, 0);
+  return res;
+};
