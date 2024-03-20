@@ -54,7 +54,7 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
         className={styles["editor-content"]}
         itemHeight={BEATHEIGHT / division}
         style={{
-          height: "100vh",
+          height: "80vh",
         }}
         reverse
       >

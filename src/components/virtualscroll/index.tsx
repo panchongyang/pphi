@@ -62,22 +62,20 @@ const VirtualScroll: React.FC<VirtualScrollProps> = (props) => {
       <div
         className={className}
         style={{
-          height: children.length * itemHeight + itemHeight,
+          height: children.length * itemHeight,
           position: "relative",
         }}
       >
         {children
-          .slice(visibleRange[0] < 0 ? 0 : visibleRange[0], visibleRange[1])
+          .slice(visibleRange[0], visibleRange[1]).reverse()
           .map((child, index) => (
             <div
               key={index}
               style={{
                 position: "absolute",
-                top:
-                  (reverse
-                    ? (children.length - (visibleRange[0] + index)) *
-                        itemHeight -itemHeight
-                    : (visibleRange[0] + index) * itemHeight),
+                top: reverse
+                  ? (children.length - visibleRange[1] + index) * itemHeight
+                  : (visibleRange[0] + index) * itemHeight,
                 width: "100%",
               }}
             >

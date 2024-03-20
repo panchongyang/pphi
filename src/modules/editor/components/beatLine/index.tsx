@@ -2,10 +2,9 @@ import { IBeat } from "@/types/beat";
 import styles from "./index.module.scss";
 import { ENoteType, INote, NoteColor } from "@/types/note";
 import { ILine } from "@/types/line";
-import { cloneDeep } from "lodash";
-import { useMemo, useRef, useState } from "react";
-import { compareBeat } from "@/utils/util";
+import { useRef, useState } from "react";
 import { Row } from "antd";
+import { BEATHEIGHT } from "../../contans";
 
 interface BeatLineProps {
   beat: IBeat;
@@ -25,26 +24,25 @@ const getNoteX = (x: number) => {
 
 const getBeatNote = (beat: IBeat, notes: INote[]) => {
   return notes.filter((note) => {
-    return compareBeat(note.time, beat) === 0;
+    return note.time[0] === beat[0];
   });
 };
 
 const ceateIdContext = () => {
   let id = 0;
   return () => {
-    return id++;
+    id = id + 1;
+    return id;
   };
 };
 
+const getId = ceateIdContext();
+
 const BeatLine: React.FC<BeatLineProps> = (props) => {
   const { beat, line, onChange } = props;
-  const [notes, setNotes] = useState<INote[]>(line.notes);
   const [viewNote, setViewNote] = useState<INote>();
   const rowRef = useRef<HTMLDivElement>(null);
 
-  const getId = useMemo(() => {
-    return ceateIdContext();
-  }, []);
   return (
     <Row
       ref={rowRef}
@@ -72,7 +70,6 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
           time: beat,
           x: getNoteX(relativeX),
         });
-        setNotes(cloneDeep(line.notes));
         onChange?.(line);
       }}
       style={{
@@ -80,7 +77,7 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
       }}
     >
       <div className={styles["beat-line"]}>
-        {getBeatNote(beat, notes).map((item) => {
+        {beat[1] === 0 && getBeatNote(beat, line.notes).map((item) => {
           return (
             <div
               key={item.id}
@@ -93,7 +90,7 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
                 height: 8,
                 backgroundColor: NoteColor[item.type],
                 left: getPositionX(item),
-                top: -2,
+                top: -4 + -(BEATHEIGHT / item.time[2]) * item.time[1],
               }}
             ></div>
           );
@@ -107,7 +104,7 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
               height: 8,
               backgroundColor: NoteColor[viewNote.type],
               left: getPositionX(viewNote),
-              top: -2,
+              top: -4,
               opacity: 0.5,
             }}
           />
