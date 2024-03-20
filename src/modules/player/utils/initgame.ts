@@ -12,7 +12,7 @@ import { beatToTime } from "@/utils/util";
 export function initGame(chart: IPhigrosChart, audio: HTMLAudioElement, status?: EGameStatus): IGame {
   const runTimeChart: IRuntimeChart = {
     ...chart,
-    lines: chart.lines.map((line) => transfromLine(line, chart.bpm)),
+    lines: chart.lines.map((line) => transfromLine(line, chart.bpm, audio.currentTime * 1000)),
     bpm: transformBpm(chart.bpm),
   };
 
@@ -41,7 +41,8 @@ function transformBpm(bpm: IBPM[]): IRuntimeBPM[] {
 function transfromNote(
   note: INote,
   bpm: IBPM[],
-  line: IRuntimeLine
+  line: IRuntimeLine,
+  time: number
 ): IRuntimeNote {
   if (note.type === ENoteType.HOLD) {
     return {
@@ -49,14 +50,14 @@ function transfromNote(
       time: beatToTime(note.time, bpm),
       duration: beatToTime(note.duration, bpm),
       line,
-      status: ENoteStatus.NOT_STARTED
+      status: time >= beatToTime(note.time, bpm) ? ENoteStatus.IN_PROGRESS : ENoteStatus.NOT_STARTED,
     };
   }
   return {
     ...note,
     time: beatToTime(note.time, bpm),
     line,
-    status: ENoteStatus.NOT_STARTED
+    status: time >= beatToTime(note.time, bpm) ? ENoteStatus.FINISHED : ENoteStatus.NOT_STARTED
   };
 }
 
@@ -68,12 +69,12 @@ function transformEvent(event: IEvent, bpm: IBPM[]): IRuntimeEvent {
   };
 }
 
-function transfromLine(line: ILine, bpm: IBPM[]): IRuntimeLine {
+function transfromLine(line: ILine, bpm: IBPM[], time: number): IRuntimeLine {
   const runline: IRuntimeLine = {
     ...line,
     notes: [],
     events: line.events.map((event) => transformEvent(event, bpm)),
   };
-  runline.notes = line.notes.map((note) => transfromNote(note, bpm, runline));
+  runline.notes = line.notes.map((note) => transfromNote(note, bpm, runline, time));
   return runline;
 }

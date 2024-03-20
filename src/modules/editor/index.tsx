@@ -46,7 +46,7 @@ const IPhigrosChartEditor: React.FC<IPhigrosChartEditorProps> = (props) => {
     return () => {
       audio.onloadedmetadata = null;
     };
-  }, [audio, chart.bpm, chart.music]);
+  }, [audio, chart.music]);
 
   const beatLines = useMemo(() => {
     if (!ready) return null;

@@ -2,9 +2,10 @@ import { IBeat } from "@/types/beat";
 import styles from "./index.module.scss";
 import { ENoteType, INote, NoteColor } from "@/types/note";
 import { ILine } from "@/types/line";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Row } from "antd";
 import { BEATHEIGHT } from "../../contans";
+import { compareBeat } from "@/utils/util";
 
 interface BeatLineProps {
   beat: IBeat;
@@ -42,10 +43,30 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
   const { beat, line, onChange } = props;
   const [viewNote, setViewNote] = useState<INote>();
   const rowRef = useRef<HTMLDivElement>(null);
+  const [focus, setFocus] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      //按下d键时，删除当前beat的note
+      if (e.key === "d" && focus) {
+        line.notes = line.notes.filter((note) => {
+          return compareBeat(note.time, beat) !== 0;
+        });
+        onChange?.(line);
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [beat, focus, line, onChange])
 
   return (
     <Row
       ref={rowRef}
+      onMouseOver={() => {
+        setFocus(true);
+      }}
       onMouseMove={(e) => {
         const rowRect = rowRef.current?.getBoundingClientRect(); // 获取Row元素的位置和大小
         const relativeX = e.clientX - (rowRect?.left || 0); // 计算鼠标相对于Row元素的位置
@@ -58,6 +79,7 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
       }}
       onMouseLeave={() => {
         setViewNote(undefined);
+        setFocus(false);
       }}
       className={styles["beat"]}
       onClick={(e) => {
@@ -77,24 +99,25 @@ const BeatLine: React.FC<BeatLineProps> = (props) => {
       }}
     >
       <div className={styles["beat-line"]}>
-        {beat[1] === 0 && getBeatNote(beat, line.notes).map((item) => {
-          return (
-            <div
-              key={item.id}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              style={{
-                position: "absolute",
-                width: 60,
-                height: 8,
-                backgroundColor: NoteColor[item.type],
-                left: getPositionX(item),
-                top: -4 + -(BEATHEIGHT / item.time[2]) * item.time[1],
-              }}
-            ></div>
-          );
-        })}
+        {beat[1] === 0 &&
+          getBeatNote(beat, line.notes).map((item) => {
+            return (
+              <div
+                key={item.id}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                style={{
+                  position: "absolute",
+                  width: 60,
+                  height: 8,
+                  backgroundColor: NoteColor[item.type],
+                  left: getPositionX(item),
+                  top: -4 + -(BEATHEIGHT / item.time[2]) * item.time[1],
+                }}
+              ></div>
+            );
+          })}
         {viewNote && (
           <div
             key={viewNote.id}
