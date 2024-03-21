@@ -1,5 +1,5 @@
 import { IPhigrosChart } from "@/types/chart";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import renderBeatLines from "../render-sdk/beatLine";
 import { beforeRender } from "../render-sdk/beforeRender";
 import {
@@ -25,7 +25,7 @@ export function useEditor(chart: IPhigrosChart, audio: HTMLAudioElement) {
   const audioRef = useRef(audio);
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const configRef = useRef<CanvasEditorConfig>({
-    beatHeight: 400,
+    beatHeight: 100,
     division: 4,
     openAnalysis: false,
   });
@@ -84,6 +84,12 @@ export function useEditor(chart: IPhigrosChart, audio: HTMLAudioElement) {
         scrollHeight: scrollEle.scrollHeight,
         reactHeight: scrollEle.clientHeight,
       };
+      //如果音频正在播放，调整滚动条
+      if (!audioRef.current.paused) {
+        scrollEle.scrollTop =
+          (1 - audioRef.current.currentTime / audioRef.current.duration) *
+          (scroll.scrollHeight - EDITOR_CANVAS_WIDTH);
+      }
       draw(context, scroll, beatCount);
       animationContext = requestAnimationFrame(update);
     };
