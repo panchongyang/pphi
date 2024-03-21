@@ -44,10 +44,10 @@ function App() {
         }}
       />
       {ready && (
-        <Row wrap={false}>
+        <>
           {audio && <CanvasEditor audio={audio} chart={chart} />}
           {/* <IPhigrosPlayer audio={audio} chart={chart} /> */}
-        </Row>
+        </>
       )}
     </div>
   );
