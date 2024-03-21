@@ -1,19 +1,24 @@
-import { Row, Slider } from "antd";
+import { Row, Skeleton, Slider } from "antd";
 import { mockChart } from "./mocks/mock";
 import IPhigrosPlayer from "./modules/player";
 import IPhigrosChartEditor from "./modules/editor";
 import "./App.scss";
 import { useEffect, useRef, useState } from "react";
+import CanvasEditor from "./modules/editor-canvas";
 
 function App() {
   const [chart, setChart] = useState(mockChart);
   const [audio, setAudio] = useState<HTMLAudioElement>();
   const ref = useRef<HTMLAudioElement>(null);
   const [progress, setProgress] = useState(0);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (ref.current) {
       setAudio(ref.current);
+      ref.current.onloadedmetadata = () => {
+        setReady(true);
+      };
       //每帧更新进度
       const updateProgress = () => {
         if (ref.current) {
@@ -38,16 +43,12 @@ function App() {
           }
         }}
       />
-      <Row wrap={false}>
-        <IPhigrosChartEditor
-          chart={chart}
-          onChartChange={(chart) => {
-            setChart(chart);
-          }}
-          audio={audio}
-        />
-        <IPhigrosPlayer audio={audio} chart={chart} />
-      </Row>
+      {ready && (
+        <Row wrap={false}>
+          {audio && <CanvasEditor audio={audio} chart={chart} />}
+          {/* <IPhigrosPlayer audio={audio} chart={chart} /> */}
+        </Row>
+      )}
     </div>
   );
 }
