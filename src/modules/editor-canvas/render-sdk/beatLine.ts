@@ -22,7 +22,7 @@ const renderBeatLines = (
     //计算beat线的y坐标, 从下往上画，第一条的y为0，向上为正
     const y =
       beatLineHeight * i -
-      (scroll.scrollHeight - EDITOR_CANVAS_HEIGHT - scroll.scrollY);
+      (scroll.scrollHeight - EDITOR_CANVAS_HEIGHT - scroll.scrollY - beatLineHeight);
     //如果在可视区域外，则不画
     if (y > EDITOR_CANVAS_HEIGHT || y < 0) continue;
     //在 - 1 / 2 EDITOR_CANVAS_WIDTH 处画文本，右对齐
