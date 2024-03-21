@@ -10,9 +10,9 @@ const tapAudio = new Audio(tapAudioSrc);
 const flickAudio = new Audio(flickAudioSrc);
 const dragAudio = new Audio(dragAudioSrc);
 
-tapAudio.volume = 1;
-flickAudio.volume = 1;
-dragAudio.volume = 1;
+tapAudio.volume = 0.1;
+flickAudio.volume = 0.1;
+dragAudio.volume = 0.1;
 
 export function renderNote(
   note: IRuntimeNote,

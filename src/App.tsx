@@ -1,10 +1,11 @@
-import { Row, Skeleton, Slider } from "antd";
+import { Row, Skeleton, Slider, Space } from "antd";
 import { mockChart } from "./mocks/mock";
 import IPhigrosPlayer from "./modules/player";
 import IPhigrosChartEditor from "./modules/editor";
 import "./App.scss";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import CanvasEditor from "./modules/editor-canvas";
+import { IPhigrosChart } from "./types/chart";
 
 function App() {
   const [chart, setChart] = useState(mockChart);
@@ -30,6 +31,10 @@ function App() {
     }
   }, []);
 
+  const handleChartChange = useCallback((chart: IPhigrosChart) => {
+    setChart(chart);
+  }, []);
+
   return (
     <div>
       <audio ref={ref} src={chart.music} controls></audio>
@@ -44,10 +49,12 @@ function App() {
         }}
       />
       {ready && (
-        <>
-          {audio && <CanvasEditor audio={audio} chart={chart} />}
-          {/* <IPhigrosPlayer audio={audio} chart={chart} /> */}
-        </>
+        <Space>
+          {audio && (
+            <CanvasEditor onChartChange={handleChartChange} audio={audio} chart={chart} />
+          )}
+          <IPhigrosPlayer audio={audio} chart={chart} />
+        </Space>
       )}
     </div>
   );

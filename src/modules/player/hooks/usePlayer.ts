@@ -28,7 +28,7 @@ export const usePlayer = (chart: IPhigrosChart, audio?: HTMLAudioElement) => {
 
   const draw = useCallback((context: CanvasRenderingContext2D) => {
     const game = gameRef.current.game!;
-    const currentTime = game.audio.currentTime * 1000;
+    const currentTime = game.audio.currentTime * 1000 + chart.offset;
     if (canvasContext.current) {
       const { width, height } = ref.current!;
       // 清空画布
@@ -49,7 +49,7 @@ export const usePlayer = (chart: IPhigrosChart, audio?: HTMLAudioElement) => {
         draw(context);
       });
     }
-  }, []);
+  }, [chart.offset]);
 
   const start = useCallback(() => {
     // 每帧循环绘制

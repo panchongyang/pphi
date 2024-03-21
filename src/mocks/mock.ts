@@ -14,6 +14,13 @@ export const MVURBDBpm: IBPM[] = [
   },
 ];
 
+const TestifyBpm: IBPM[] = [
+  {
+    target: 178,
+    time: [0, 0, 1],
+  },
+];
+
 const mockLine1: ILine = {
   id: "1",
   notes: [],
@@ -41,8 +48,8 @@ const mockLine1: ILine = {
       (_, i) =>
         ({
           id: `e${i}`,
-          startTime: [i, 0, 1],
-          endTime: [i + 1, 0, 1],
+          startTime: [i * 2, 0, 1],
+          endTime: [i * 2 + 2, 0, 1],
           startValue: [10, -10][i % 2],
           endValue: [10, -10][(i + 1) % 2],
           type: EEventType.ROTATION,
@@ -57,7 +64,7 @@ const mockLine1: ILine = {
   speed: 9,
 };
 
-// mockLine1.notes = getMockNotes();
+mockLine1.notes = getMockNotes();
 
 const mockLine2: ILine = {
   events: [
@@ -119,11 +126,11 @@ const mockLine2: ILine = {
 export const mockChart: IPhigrosChart = {
   id: "c1",
   author: "",
-  music: MVURBD,
+  music: testify,
   lines: [mockLine1, mockLine2],
-  bpm: MVURBDBpm,
-  offset: 0,
-  background: background
+  bpm: TestifyBpm,
+  offset: 50,
+  background: background,
 };
 
 function getMockNotes(): INote[] {
@@ -131,7 +138,7 @@ function getMockNotes(): INote[] {
   for (let i = 0; i < 600; i++) {
     notes.push({
       id: i.toString(),
-      time: [i, 0, 1],
+      time: [i * 2, 0, 1],
       type: ENoteType.TAP,
       x: Math.random() * 1400 - 700,
     });
